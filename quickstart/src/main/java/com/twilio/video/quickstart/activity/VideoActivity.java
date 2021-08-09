@@ -42,6 +42,8 @@ import com.twilio.video.IsacCodec;
 import com.twilio.video.LocalAudioTrack;
 import com.twilio.video.LocalParticipant;
 import com.twilio.video.LocalVideoTrack;
+import com.twilio.video.LogModule;
+import com.twilio.video.LogLevel;
 import com.twilio.video.OpusCodec;
 import com.twilio.video.PcmaCodec;
 import com.twilio.video.PcmuCodec;
@@ -424,6 +426,7 @@ public class VideoActivity extends AppCompatActivity {
     private void connectToRoom(String roomName) {
         audioSwitch.activate();
         ConnectOptions.Builder connectOptionsBuilder = new ConnectOptions.Builder(accessToken)
+                .enableIceGatheringOnAnyAddressPorts(true)
                 .roomName(roomName);
 
         /*
@@ -462,6 +465,10 @@ public class VideoActivity extends AppCompatActivity {
         connectOptionsBuilder.enableAutomaticSubscription(enableAutomaticSubscription);
 
         room = Video.connect(this, connectOptionsBuilder.build(), roomListener());
+        Video.setLogLevel(LogLevel.DEBUG);
+        Video.setModuleLogLevel(LogModule.PLATFORM, LogLevel.DEBUG);
+        Video.setModuleLogLevel(LogModule.WEBRTC, LogLevel.ALL);
+
         setDisconnectAction();
     }
 
